@@ -1,7 +1,7 @@
 import { Client } from "discord.js-selfbot-v13";
 export const client = new Client();
 
-const token = "MTM0NTI4MDAzNDA0MjAxOTg1MA.GF_cCG._r9WgY9wdqIE4vNBX4EtfbobLxGBPbkvfbiSyU";
+const token = "";
 let running = true;
 
 /** Functions */
