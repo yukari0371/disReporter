@@ -1,7 +1,8 @@
 import { Client } from "discord.js-selfbot-v13";
 export const client = new Client();
-
-const token = "";
+import dotenv from "dotenv";
+dotenv.config();
+const token = process.env.TOKEN;
 let running = true;
 
 /** Functions */
