@@ -5,34 +5,20 @@ const regexies = {
 }
 
 export async function violationDetector(message) {
-    return Promise((resolve, reject) => {
-
     // 13歳未満
-        if (regexies.age.test(message)) {
-            resolve({
-                success: true,
-                type: 0
-            });
-        }
+    if (regexies.age.test(message)) {
+        return { success: true, type: 0 };
+    }
 
-    // token貼り
-        if (regexies.token.test(message)) {
-            resolve({
-                success: true,
-                type: 1
-            });
-        }
+    // token
+    if (regexies.token.test(message)) {
+        return { success: true, type: 1 };
+    }
 
-    // steamcommunity
-        if (regexies.steamcommunity.test(message)) {
-            resolve({
-                success: true,
-                type: 3
-            });
-        }
+    // steam
+    if (regexies.steamcommunity.test(message)) {
+        return { success: true, type: 2 };
+    }
 
-        reject({
-            success: false
-        });
-    });
+    return { success: false };
 }

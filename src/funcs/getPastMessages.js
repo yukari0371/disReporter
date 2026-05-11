@@ -1,4 +1,4 @@
-import client from "../index.js";
+import { client } from "../index.js";
 
 /** Functions */
 import {
@@ -8,7 +8,7 @@ import {
 
 export async function getPassMesssages(channelId) {
     try {
-        const channel = client.channels.cache.get(channelId);
+        const channel = await client.channels.fetch(channelId);
         const allMessages = [];
         let lastId;
         while (true) {
@@ -30,8 +30,8 @@ export async function getPassMesssages(channelId) {
         };
     } catch (e) {            
             return {
-            success: false,
-            message: e.message
+                success: false,
+                message: e.message
         };
     }
 }
