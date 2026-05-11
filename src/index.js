@@ -1,0 +1,63 @@
+import { Client } from "discord.js-selfbot-v13";
+export const client = new Client();
+
+const token = "";
+let running = true;
+
+/** Functions */
+import { getPassMesssages } from "./funcs/getPastMessages.js";
+import { messageReport } from "./funcs/messageReport.js";
+import { violationDetector } from "./funcs/violationDetector.js";
+import {
+    prompt,
+    sleep
+} from "./utils.js";
+import { channel } from "node:diagnostics_channel";
+
+(async() => {
+    client.once("ready", async () => {
+        logger.info("logged in as:", client.user.tag);
+    });
+
+    // menu
+    console.log(`
+Select menu
+1. Retrieve past violation messages
+e. exit
+`);
+    
+    while (running) {}
+    const select = await prompt("select");
+
+    switch (select) {
+        case "1":
+            const channelId = await prompt("channelId");
+            const result = await getPassMesssages(channelId);
+            if (result.success) {
+                for (const msg of result.allMessages) {
+                    const isViolation = await violationDetector(msg.content);
+                    if (isViolation.success) {
+                        await messageReport(token, isViolation.type, channelId, msg.id);
+                    }
+                }
+            }
+            logger.error(result.message);
+        break;
+        case "e":
+            logger.info("Exiting...");
+            await sleep(3000);
+            process.exit(0);
+        break;
+        default:
+            logger.error("Select is invalid.");
+    }
+
+    client.on("messageCreate", async (message) => {
+        const isViolation = await violationDetector(message.content);
+        if (isViolation.success) {
+            await messageReport(token, isViolation.type, message.channel.id, message.id);
+        }
+    });
+
+    client.login(token);
+})();
